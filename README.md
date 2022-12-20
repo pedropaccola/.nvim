@@ -1,4 +1,4 @@
-## init.lua
+## .nvim
 
 ### Requirements
 * [Neovim](https://github.com/neovim/neovim) >= 0.8.0
