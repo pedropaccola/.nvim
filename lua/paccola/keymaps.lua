@@ -2,6 +2,7 @@
 local keymap = vim.keymap.set
 -- Silent keymap option
 local opts = { silent = true }
+local opts2 = {silent = true, noremap = true}
 
 --Remap space as leader key
 keymap("", "<Space>", "<Nop>", opts)
@@ -21,6 +22,8 @@ keymap("n", "<C-h>", "<C-w>h", opts)
 keymap("n", "<C-j>", "<C-w>j", opts)
 keymap("n", "<C-k>", "<C-w>k", opts)
 keymap("n", "<C-l>", "<C-w>l", opts)
+keymap("n", "<C-d>", "<C-d>zz", opts)
+keymap("n", "<C-u>", "<C-u>zz", opts)
 
 -- Resize with arrows
 keymap("n", "<C-Up>", ":resize -2<CR>", opts)
@@ -39,7 +42,7 @@ keymap("n", "<leader>h", "<cmd>nohlsearch<CR>", opts)
 keymap("n", "<leader>w", ":w<CR>", opts)
 
 -- Close buffers
-keymap("n", "<S-q>", "<cmd>Bdelete!<CR>", opts)
+keymap("n", "<S-q>", "<cmd>bd<CR>", opts)
 
 -- Better paste
 keymap("v", "p", '"_dP', opts)
@@ -67,15 +70,20 @@ keymap('n', '<leader>fb', require('telescope.builtin').buffers, { desc = '[F]ind
 keymap('n', '<leader>fw', require('telescope.builtin').grep_string, { desc = '[F]ind current [W]ord' })
 keymap('n', '<leader>fd', require('telescope.builtin').diagnostics, { desc = '[F]ind [D]iagnostics' })
 
--- Git
-keymap("n", "<leader>gg", "<cmd>lua _LAZYGIT_TOGGLE()<CR>", opts) --Toggleterm
-
 -- Fugitive
 keymap("n", "<leader>gd", ":Gdiff<CR>")
 
 -- Comment
 keymap("n", "<leader>k", ":Commentary<cr>")
 keymap("v", "<leader>k", ":Commentary<cr>")
+
+-- Troule
+keymap("n", "<leader>xx", "<cmd>TroubleToggle<cr>", opts2)
+keymap("n", "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>", opts2)
+keymap("n", "<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>", opts2)
+keymap("n", "<leader>xl", "<cmd>TroubleToggle loclist<cr>", opts2)
+keymap("n", "<leader>xq", "<cmd>TroubleToggle quickfix<cr>", opts2)
+keymap("n", "gR", "<cmd>TroubleToggle lsp_references<cr>", opts2)
 
 -- DAP
 --keymap("n", "<leader>db", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", opts)

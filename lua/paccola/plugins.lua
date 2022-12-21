@@ -90,6 +90,7 @@ packer.startup(function(use)
     use { 'nvim-lualine/lualine.nvim' }                           --Status line
     use { 'lewis6991/gitsigns.nvim' }                             --Git signs
     use { 'akinsho/bufferline.nvim' }                             --Buffer tabs
+    use { 'folke/trouble.nvim' }                                  --Errors UI
 
     if packer_bootstrap then
         require('packer').sync()
