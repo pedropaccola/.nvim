@@ -1,14 +1,4 @@
-local colorscheme = "dracula"
-
-local status_ok, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)
-if not status_ok then
-  return
-end
-
-local status_ok, dracula = pcall(require, "dracula")
-if not status_ok then
-  return
-end
+local dracula = require("dracula")
 
 dracula.setup({
   -- customize dracula color palette
@@ -47,8 +37,15 @@ dracula.setup({
   -- overrides the default highlights see `:h synIDattr`
   overrides = {
     -- Examples
-    -- NonText = { fg = dracula.colors().white }, -- set NonText fg to white
-    -- NvimTreeIndentMarker = { link = "NonText" }, -- link to NonText highlight
-    -- Nothing = {} -- clear highlight of Nothing
+    NonText = { fg = dracula.colors().white }, -- set NonText fg to white
+    NvimTreeIndentMarker = { link = "NonText" }, -- link to NonText highlight
+    Nothing = {} -- clear highlight of Nothing
   },
 })
+
+local colorscheme = "dracula"
+
+local status_ok, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)
+if not status_ok then
+  return
+end
