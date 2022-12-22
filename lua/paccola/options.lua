@@ -7,7 +7,7 @@ vim.opt.cursorline = true                       -- highlight the current line
 vim.opt.expandtab = true                        -- convert tabs to spaces
 vim.opt.fillchars.eob=" "                       -- show empty lines at the end of a buffer as ` ` {default `~`}
 vim.opt.formatoptions:remove({ "c", "r", "o" }) -- This is a sequence of letters which describes how automatic formatting is to be done
-vim.opt.guifont = "Fira Code:h17"               -- the font used in graphical neovim applications
+vim.opt.guifont = "Fira Code:h16"               -- the font used in graphical neovim applications
 vim.opt.hlsearch = true                         -- highlight all matches on previous search pattern
 vim.opt.ignorecase = true                       -- ignore case in search patterns
 vim.opt.iskeyword:append("-")                   -- treats words with `-` as single words
