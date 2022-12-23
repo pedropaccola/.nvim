@@ -1,4 +1,7 @@
-local dracula = require("dracula")
+local status_ok, dracula = pcall(require, "dracula")
+if not status_ok then
+	return
+end
 
 dracula.setup({
 	-- customize dracula color palette
@@ -45,7 +48,8 @@ dracula.setup({
 
 local colorscheme = "dracula"
 
-local status_ok, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)
-if not status_ok then
+local status_color, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)
+if not status_color then
+	print("Colorscheme not found")
 	return
 end
