@@ -49,6 +49,7 @@ packer.startup(function(use)
 	--
 	-- LSP plugins
 	use({ "neovim/nvim-lspconfig" })
+	use({ "hrsh7th/cmp-nvim-lsp" })
 	use({ "jose-elias-alvarez/typescript.nvim" })
 	use({ "glepnir/lspsaga.nvim" })
 	use({ "onsails/lspkind.nvim" })
@@ -59,11 +60,10 @@ packer.startup(function(use)
 	use({ "jayp0521/mason-null-ls.nvim" })
 
 	-- Autocompletion
-	use({ "hrsh7th/cmp-nvim-lsp" })
 	use({ "hrsh7th/cmp-buffer" })
 	use({ "hrsh7th/cmp-path" })
 	use({ "hrsh7th/nvim-cmp" })
-	use({ "hrsh7th/cmp-nvim-lua" })
+	-- use({ "hrsh7th/cmp-nvim-lua" })
 
 	-- Snippets
 	use({ "saadparwaiz1/cmp_luasnip" })
@@ -86,6 +86,7 @@ packer.startup(function(use)
 	-- Text manipulation
 	use({ "tpope/vim-commentary" }) --Comment out code
 	use({ "windwp/nvim-autopairs" }) --Auto closing quotes, brackets, etc
+	use({ "windwp/nvim-ts-autotag", after = "nvim-treesitter" })
 
 	-- UI
 	use({ "Mofiqul/dracula.nvim" }) --Colorscheme
