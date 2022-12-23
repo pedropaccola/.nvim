@@ -79,20 +79,9 @@ keymap("n", "<leader>gfc", "<cmd>Telescope git_bcommits<cr>")
 keymap("n", "<leader>gb", "<cmd>Telescope git_branches<cr>")
 keymap("n", "<leader>gs", "<cmd>Telescope git_status<cr>")
 
--- Fugitive
-keymap("n", "<leader>gd", ":Git diff<CR>")
-
 -- Comment
 keymap("n", "<leader>k", ":Commentary<CR>")
 keymap("v", "<leader>k", ":Commentary<CR>")
-
--- Trouble
-keymap("n", "<leader>xx", "<cmd>TroubleToggle<CR>", opts)
-keymap("n", "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<CR>", opts)
-keymap("n", "<leader>xd", "<cmd>TroubleToggle document_diagnostics<CR>", opts)
-keymap("n", "<leader>xl", "<cmd>TroubleToggle loclist<CR>", opts)
-keymap("n", "<leader>xq", "<cmd>TroubleToggle quickfix<CR>", opts)
-keymap("n", "gr", "<cmd>TroubleToggle lsp_references<CR>", opts)
 
 -- Toggleterm
 function _G.set_terminal_keymaps()

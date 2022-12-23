@@ -8,8 +8,6 @@ if not actions_ok then
 	return
 end
 
-local trouble = require("trouble.providers.telescope")
-
 telescope.setup({
 	defaults = {
 
@@ -23,10 +21,6 @@ telescope.setup({
 				["<C-j>"] = actions.move_selection_next,
 				["<C-k>"] = actions.move_selection_previous,
 				["<C-c>"] = actions.close,
-				["<C-t>"] = trouble.open_with_trouble,
-			},
-			n = {
-				["<C-t"] = trouble.open_with_trouble,
 			},
 		},
 	},

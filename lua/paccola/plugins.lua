@@ -80,10 +80,6 @@ packer.startup(function(use)
 	use({ "akinsho/toggleterm.nvim", tag = "*" }) --Floating terminal
 	use({ "nvim-tree/nvim-tree.lua" }) --File explorer
 
-	-- Git Plugins
-	use({ "tpope/vim-fugitive" }) --Git wrapper
-	use({ "junegunn/gv.vim" }) --Git commit browser
-
 	-- Syntax
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" }) --Syntax highlighting
 
@@ -97,7 +93,6 @@ packer.startup(function(use)
 	use({ "lewis6991/gitsigns.nvim" }) --Git signs
 	use({ "akinsho/bufferline.nvim" }) --Buffer tabs
 	use({ "moll/vim-bbye" }) --Close buffers
-	use({ "folke/trouble.nvim" }) --Errors UI
 	use({ "nvim-tree/nvim-web-devicons" }) --Colored icons
 
 	-- Automatically set up your configuration after cloning packer.nvim
