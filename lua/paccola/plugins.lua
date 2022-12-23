@@ -88,7 +88,9 @@ packer.startup(function(use)
 	use({ "nvim-lualine/lualine.nvim" }) --Status line
 	use({ "lewis6991/gitsigns.nvim" }) --Git signs
 	use({ "akinsho/bufferline.nvim" }) --Buffer tabs
+	use({ "moll/vim-bbye" }) --Close buffers
 	use({ "folke/trouble.nvim" }) --Errors UI
+	use({ "nvim-tree/nvim-web-devicons" }) --Colored icons
 
 	if packer_bootstrap then
 		require("packer").sync()

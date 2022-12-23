@@ -6,6 +6,7 @@ end
 bufferline.setup({
 	options = {
 		show_close_icon = true,
+		numbers = "ordinal",
 		separator_style = "thick",
 		always_show_bufferline = true,
 		diagnostics = "nvim_lsp",
