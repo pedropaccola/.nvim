@@ -26,6 +26,7 @@ opt.cursorline = true -- highlight the current line
 
 --UI
 opt.termguicolors = true -- set term gui colors (most terminals support this)
+opt.background = "dark"
 opt.guifont = "Fira Code:h15" -- the font used in graphical neovim applications
 opt.signcolumn = "yes" -- always show the sign column, otherwise it would shift the text each time
 opt.showmode = false -- lualine does this job

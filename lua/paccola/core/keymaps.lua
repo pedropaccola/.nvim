@@ -1,14 +1,3 @@
--- Shorten function name
-local keymap = vim.keymap.set
--- Silent keymap option
-local opts = { silent = true, noremap = true }
-local term_opts = { silent = true }
-
---Remap space as leader key
-keymap("", "<Space>", "<Nop>", opts)
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-
 -- Modes
 --   normal_mode = "n",
 --   insert_mode = "i",
@@ -16,6 +5,18 @@ vim.g.maplocalleader = " "
 --   visual_block_mode = "x",
 --   term_mode = "t",
 --   command_mode = "c",
+
+local keymap = vim.keymap.set
+local opts = { silent = true, noremap = true }
+local term_opts = { silent = true }
+
+---------------------
+-- General Keymaps
+---------------------
+
+--Remap space as leader key
+keymap("", "<Space>", "<Nop>", opts)
+vim.g.mapleader = " "
 
 -- Better window navigation
 keymap("n", "<C-h>", "<C-w>h", opts)
@@ -58,8 +59,11 @@ keymap("v", "p", '"_dp', opts)
 keymap("v", "<", "<gv", opts)
 keymap("v", ">", ">gv", opts)
 
--- Plugins
--- NvimTree
+---------------------
+-- Plugin Keymaps
+---------------------
+
+-- Nvim-Tree
 keymap("n", "<leader>e", ":NvimTreeToggle<CR>", opts)
 
 -- Telescope
@@ -70,15 +74,19 @@ keymap("n", "<leader>fh", "<cmd>Telescope oldfiles<CR>")
 keymap("n", "<leader>fb", "<cmd>Telescope buffers<CR>")
 keymap("n", "<leader>fw", "<cmd>Telescope grep_string<CR>")
 keymap("n", "<leader>fd", "<cmd>Telescope diagnostics<CR>")
+keymap("n", "<leader>gc", "<cmd>Telescope git_commits<cr>")
+keymap("n", "<leader>gfc", "<cmd>Telescope git_bcommits<cr>")
+keymap("n", "<leader>gb", "<cmd>Telescope git_branches<cr>")
+keymap("n", "<leader>gs", "<cmd>Telescope git_status<cr>")
 
--- fugitive
-keymap("n", "<leader>gd", ":gdiff<CR>")
+-- Fugitive
+keymap("n", "<leader>gd", ":Git diff<CR>")
 
--- comment
+-- Comment
 keymap("n", "<leader>k", ":Commentary<CR>")
 keymap("v", "<leader>k", ":Commentary<CR>")
 
--- trouble
+-- Trouble
 keymap("n", "<leader>xx", "<cmd>TroubleToggle<CR>", opts)
 keymap("n", "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<CR>", opts)
 keymap("n", "<leader>xd", "<cmd>TroubleToggle document_diagnostics<CR>", opts)
@@ -86,18 +94,7 @@ keymap("n", "<leader>xl", "<cmd>TroubleToggle loclist<CR>", opts)
 keymap("n", "<leader>xq", "<cmd>TroubleToggle quickfix<CR>", opts)
 keymap("n", "gr", "<cmd>TroubleToggle lsp_references<CR>", opts)
 
--- dap
---keymap("n", "<leader>db", "<cmd>lua require'dap'.toggle_breakpoint()<CR>", opts)
---keymap("n", "<leader>dc", "<cmd>lua require'dap'.continue()<CR>", opts)
---keymap("n", "<leader>di", "<cmd>lua require'dap'.step_into()<CR>", opts)
---keymap("n", "<leader>do", "<cmd>lua require'dap'.step_over()<CR>", opts)
---keymap("n", "<leader>do", "<cmd>lua require'dap'.step_out()<CR>", opts)
---keymap("n", "<leader>dr", "<cmd>lua require'dap'.repl.toggle()<CR>", opts)
---keymap("n", "<leader>dl", "<cmd>lua require'dap'.run_last()<CR>", opts)
---keymap("n", "<leader>du", "<cmd>lua require'dapui'.toggle()<CR>", opts)
---keymap("n", "<leader>dt", "<cmd>lua require'dap'.terminate()<CR>", opts)
-
--- toggleterm
+-- Toggleterm
 function _G.set_terminal_keymaps()
 	vim.api.nvim_buf_set_keymap(0, "t", "<ESC>", [[<c-\><c-n>]], term_opts)
 	vim.api.nvim_buf_set_keymap(0, "t", "jk", [[<c-\><c-n>]], term_opts)
