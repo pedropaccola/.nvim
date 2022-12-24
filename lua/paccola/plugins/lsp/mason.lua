@@ -26,6 +26,7 @@ mason_lspconfig.setup({
 		"emmet_ls",
 		"gopls",
 		"rust_analyzer",
+		"taplo",
 	},
 	automatic_installation = true,
 })

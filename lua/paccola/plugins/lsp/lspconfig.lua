@@ -13,8 +13,8 @@ if not typescript_status then
 	return
 end
 
-local rust_status, rust = pcall(require, "rust-tools")
-if not rust_status then
+local rs_status, rs = pcall(require, "rust-tools")
+if not rs_status then
 	return
 end
 
@@ -41,12 +41,6 @@ local on_attach = function(client, bufnr)
 		keymap("n", "<leader>rf", ":TypescriptRenameFile<CR>") -- rename file and update imports
 		keymap("n", "<leader>oi", ":TypescriptOrganizeImports<CR>") -- organize imports (not in youtube nvim video)
 		keymap("n", "<leader>ru", ":TypescriptRemoveUnused<CR>") -- remove unused variables (not in youtube nvim video)
-	end
-
-	--rust specific keymaps
-	if client.name == "rust_analyzer" then
-		keymap("n", "<C-space>", rust.hover_actions.hover_actions, { buffer = bufnr })
-		keymap("n", "<Leader>a", rust.code_action_group.code_action_group, { buffer = bufnr })
 	end
 end
 
@@ -130,20 +124,73 @@ lspconfig["gopls"].setup({
 		gopls = {
 			analyses = {
 				unusedparams = true,
+				shadow = true,
 			},
-			staticcheck = false,
+			staticcheck = true,
+		},
+	},
+	init_options = {
+		usePlaceholders = true,
+	},
+})
+
+rs.setup({
+	tools = {
+		runnables = {
+			use_telescope = true,
+		},
+		inlay_hints = {
+			auto = true,
+			show_parameter_hints = false,
+			parameter_hints_prefix = "",
+			other_hints_prefix = "",
+		},
+	},
+
+	-- all the opts to send to nvim-lspconfig
+	-- these override the defaults set by rust-tools.nvim
+	-- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
+	server = {
+		-- on_attach is a callback called when the language server attachs to the buffer
+		capabilities = capabilities,
+		on_attach = on_attach,
+		settings = {
+			-- to enable rust-analyzer settings visit:
+			-- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+			["rust-analyzer"] = {
+				-- enable clippy on save
+				checkOnSave = {
+					command = "clippy",
+				},
+			},
 		},
 	},
 })
 
-rust.setup({
-	tools = {
-		inlay_hints = {
-			show_parameter_hints = false,
-		},
-	},
-	server = {
-		on_attach = on_attach,
-		capabilities = capabilities,
-	},
-})
+-- lspconfig["rust_analyzer"].setup({
+-- 	capabilities = capabilities,
+-- 	on_attach = on_attach,
+-- 	settings = {
+-- 		["rust-analyzer"] = {
+-- 			imports = {
+-- 				granularity = {
+-- 					group = "module",
+-- 				},
+-- 				prefix = "self",
+-- 			},
+-- 			cargo = {
+-- 				buildScripts = {
+-- 					enable = true,
+-- 				},
+-- 			},
+-- 			procMacro = {
+-- 				enable = true,
+-- 			},
+-- 		},
+-- 	},
+-- })
+
+-- lspconfig["taplo"].setup({
+-- 	capabilities = capabilities,
+-- 	on_attach = on_attach,
+-- })
