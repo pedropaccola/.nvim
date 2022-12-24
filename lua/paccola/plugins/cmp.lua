@@ -36,9 +36,11 @@ cmp.setup({
 	}),
 	-- sources for autocompletion
 	sources = cmp.config.sources({
-		{ name = "nvim_lsp" }, -- lsp
-		{ name = "luasnip" }, -- snippets
-		{ name = "buffer" }, -- text within current buffer
+		{ name = "nvim_lsp", keyword_lenght = 3 }, -- lsp
+		{ name = "nvim_lua", keyword_lenght = 2 }, -- Lua Runtime API such as `vim.lsp.*`
+		{ name = "nvim_lsp_signature_help" }, --function signatures
+		{ name = "luasnip", keyword_lenght = 2 }, -- snippets
+		{ name = "buffer", keyword_lenght = 2 }, -- text within current buffer
 		{ name = "path" }, -- file system paths
 	}),
 	-- configure lspkind for vs-code like icons

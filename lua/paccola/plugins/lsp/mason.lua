@@ -25,7 +25,7 @@ mason_lspconfig.setup({
 		"tailwindcss",
 		"emmet_ls",
 		"gopls",
-		"rust-analyzer",
+		"rust_analyzer",
 	},
 	automatic_installation = true,
 })
@@ -43,7 +43,6 @@ mason_null_ls.setup({
 		"goimports",
 		"goimports_reviser",
 		"golines",
-		--Rust
-		"rustfmt",
+		--Rust "rustfmt",
 	},
 })

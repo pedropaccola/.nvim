@@ -44,7 +44,7 @@ local on_attach = function(client, bufnr)
 	end
 
 	--rust specific keymaps
-	if client.name == "rust-analyzer" then
+	if client.name == "rust_analyzer" then
 		keymap("n", "<C-space>", rust.hover_actions.hover_actions, { buffer = bufnr })
 		keymap("n", "<Leader>a", rust.code_action_group.code_action_group, { buffer = bufnr })
 	end
@@ -59,6 +59,19 @@ for type, icon in pairs(signs) do
 	local hl = "DiagnosticSign" .. type
 	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
+vim.diagnostic.config({
+	virtual_text = false,
+	signs = true,
+	update_in_insert = true,
+	underline = true,
+	severity_sort = false,
+	float = {
+		border = "rounded",
+		source = "always",
+		header = "",
+		prefix = "",
+	},
+})
 
 -- Servers configuration
 lspconfig["html"].setup({
@@ -124,6 +137,11 @@ lspconfig["gopls"].setup({
 })
 
 rust.setup({
+	tools = {
+		inlay_hints = {
+			show_parameter_hints = false,
+		},
+	},
 	server = {
 		on_attach = on_attach,
 		capabilities = capabilities,
