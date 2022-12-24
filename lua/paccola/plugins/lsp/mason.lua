@@ -15,7 +15,7 @@ end
 
 mason.setup()
 
-  --LSPs
+--LSPs
 mason_lspconfig.setup({
 	ensure_installed = {
 		"sumneko_lua",
@@ -25,6 +25,7 @@ mason_lspconfig.setup({
 		"tailwindcss",
 		"emmet_ls",
 		"gopls",
+		"rust-analyzer",
 	},
 	automatic_installation = true,
 })
@@ -42,5 +43,7 @@ mason_null_ls.setup({
 		"goimports",
 		"goimports_reviser",
 		"golines",
+		--Rust
+		"rustfmt",
 	},
 })

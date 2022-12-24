@@ -50,7 +50,6 @@ packer.startup(function(use)
 	-- LSP plugins
 	use({ "neovim/nvim-lspconfig" })
 	use({ "hrsh7th/cmp-nvim-lsp" })
-	use({ "jose-elias-alvarez/typescript.nvim" })
 	use({ "glepnir/lspsaga.nvim" })
 	use({ "onsails/lspkind.nvim" })
 	use({
@@ -58,6 +57,8 @@ packer.startup(function(use)
 		requires = { { "nvim-lua/plenary.nvim" } },
 	})
 	use({ "jayp0521/mason-null-ls.nvim" })
+	use({ "jose-elias-alvarez/typescript.nvim" })
+	use({ "simrat39/rust-tools.nvim" })
 
 	-- Autocompletion
 	use({ "hrsh7th/cmp-buffer" })
@@ -90,6 +91,7 @@ packer.startup(function(use)
 
 	-- UI
 	use({ "Mofiqul/dracula.nvim" }) --Colorscheme
+	use({ "folke/tokyonight.nvim" }) --Colorscheme
 	use({ "nvim-lualine/lualine.nvim" }) --Status line
 	use({ "lewis6991/gitsigns.nvim" }) --Git signs
 	use({ "akinsho/bufferline.nvim" }) --Buffer tabs

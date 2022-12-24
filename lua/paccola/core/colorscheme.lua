@@ -1,5 +1,6 @@
-local status_ok, dracula = pcall(require, "dracula")
-if not status_ok then
+--Dracula
+local dracula_ok, dracula = pcall(require, "dracula")
+if not dracula_ok then
 	return
 end
 
@@ -29,23 +30,27 @@ dracula.setup({
 		gutter_fg = "#4B5263",
 		nontext = "#3B4048",
 	},
-	-- show the '~' characters after the end of buffers
-	show_end_of_buffer = false, -- default false
 	-- use transparent background
 	transparent_bg = true, -- default false
-	-- set custom lualine background color
-	lualine_bg_color = "nil", -- default nil
 	-- set italic comment
 	italic_comment = true, -- default false
-	-- overrides the default highlights see `:h synIDattr`
-	overrides = {
-		-- Examples
-		-- NonText = { fg = dracula.colors().white }, -- set NonText fg to white
-		-- NvimTreeIndentMarker = { link = "NonText" }, -- link to NonText highlight
-		-- Nothing = {}, -- clear highlight of Nothing
-	},
 })
 
+--Tokyonight
+local tokyonight_ok, tokyonight = pcall(require, "tokyonight")
+if not tokyonight_ok then
+	return
+end
+
+tokyonight.setup({
+	style = "moon", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
+	transparent = true, -- Enable this to disable setting the background color
+	terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
+	dim_inactive = false, -- dims inactive windows
+	lualine_bold = true, -- When `true`, section headers in the lualine theme will be bold
+})
+
+--Setting Colorscheme
 local colorscheme = "dracula"
 
 local status_color, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)
