@@ -8,21 +8,24 @@ if not cmp_nvim_lsp_status then
 	return
 end
 
+local fidget_status, fidget = pcall(require, "fidget")
+if not fidget_status then
+	return
+end
+
 local typescript_status, typescript = pcall(require, "typescript")
 if not typescript_status then
 	return
 end
 
-local rs_status, rs = pcall(require, "rust-tools")
-if not rs_status then
-	return
-end
+--fidget
+fidget.setup()
 
 -- Enable keybinds only when lsp server is available
-local keymap = vim.keymap.set
 local on_attach = function(client, bufnr)
-	local opts = { noremap = true, silent = true, buffer = bufnr }
 	--general keymaps
+	local keymap = vim.keymap.set
+	local opts = { noremap = true, silent = true, buffer = bufnr }
 	keymap("n", "gf", "<cmd>Lspsaga lsp_finder<CR>", opts) -- show definition, references
 	keymap("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts) -- got to declaration
 	keymap("n", "gd", "<cmd>Lspsaga peek_definition<CR>", opts) -- see definition and make edits in window
@@ -42,6 +45,19 @@ local on_attach = function(client, bufnr)
 		keymap("n", "<leader>oi", ":TypescriptOrganizeImports<CR>") -- organize imports (not in youtube nvim video)
 		keymap("n", "<leader>ru", ":TypescriptRemoveUnused<CR>") -- remove unused variables (not in youtube nvim video)
 	end
+
+	--diagnostics
+	local diag_float_grp = vim.api.nvim_create_augroup("DiagnosticFloat", { clear = true })
+	vim.api.nvim_create_autocmd("CursorHold", {
+		callback = function()
+			vim.diagnostic.open_float(nil, { focusable = false })
+		end,
+		group = diag_float_grp,
+	})
+
+	-- Goto previous/next diagnostic warning/error
+	keymap("n", "g[", vim.diagnostic.goto_prev, opts)
+	keymap("n", "g]", vim.diagnostic.goto_next, opts)
 end
 
 -- Enable autocompletion
@@ -53,12 +69,13 @@ for type, icon in pairs(signs) do
 	local hl = "DiagnosticSign" .. type
 	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
+
 vim.diagnostic.config({
-	virtual_text = false,
+	virtual_text = false, --shows diagnistics after text, false because of float window in on_attach function
 	signs = true,
 	update_in_insert = true,
 	underline = true,
-	severity_sort = false,
+	severity_sort = true,
 	float = {
 		border = "rounded",
 		source = "always",
@@ -134,63 +151,33 @@ lspconfig["gopls"].setup({
 	},
 })
 
-rs.setup({
-	tools = {
-		runnables = {
-			use_telescope = true,
-		},
-		inlay_hints = {
-			auto = true,
-			show_parameter_hints = false,
-			parameter_hints_prefix = "",
-			other_hints_prefix = "",
-		},
-	},
-
-	-- all the opts to send to nvim-lspconfig
-	-- these override the defaults set by rust-tools.nvim
-	-- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
-	server = {
-		-- on_attach is a callback called when the language server attachs to the buffer
-		capabilities = capabilities,
-		on_attach = on_attach,
-		settings = {
-			-- to enable rust-analyzer settings visit:
-			-- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
-			["rust-analyzer"] = {
-				-- enable clippy on save
-				checkOnSave = {
-					command = "clippy",
+lspconfig["rust_analyzer"].setup({
+	capabilities = capabilities,
+	on_attach = on_attach,
+	settings = {
+		["rust-analyzer"] = {
+			checkOnSave = {
+				command = "clippy",
+			},
+			imports = {
+				granularity = {
+					group = "module",
 				},
+				prefix = "self",
+			},
+			cargo = {
+				buildScripts = {
+					enable = true,
+				},
+			},
+			procMacro = {
+				enable = true,
 			},
 		},
 	},
 })
 
--- lspconfig["rust_analyzer"].setup({
--- 	capabilities = capabilities,
--- 	on_attach = on_attach,
--- 	settings = {
--- 		["rust-analyzer"] = {
--- 			imports = {
--- 				granularity = {
--- 					group = "module",
--- 				},
--- 				prefix = "self",
--- 			},
--- 			cargo = {
--- 				buildScripts = {
--- 					enable = true,
--- 				},
--- 			},
--- 			procMacro = {
--- 				enable = true,
--- 			},
--- 		},
--- 	},
--- })
-
--- lspconfig["taplo"].setup({
--- 	capabilities = capabilities,
--- 	on_attach = on_attach,
--- })
+lspconfig["taplo"].setup({
+	capabilities = capabilities,
+	on_attach = on_attach,
+})

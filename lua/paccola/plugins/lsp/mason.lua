@@ -44,6 +44,9 @@ mason_null_ls.setup({
 		"goimports",
 		"goimports_reviser",
 		"golines",
-		--Rust "rustfmt",
+		--Rust
+		"rustfmt",
 	},
+	automatic_installation = true,
+	automatic_setup = false,
 })

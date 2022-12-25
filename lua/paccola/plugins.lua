@@ -58,7 +58,7 @@ packer.startup(function(use)
 	})
 	use({ "jayp0521/mason-null-ls.nvim" })
 	use({ "jose-elias-alvarez/typescript.nvim" })
-	use({ "simrat39/rust-tools.nvim" })
+	use({ "j-hui/fidget.nvim" })
 
 	-- Autocompletion
 	use({ "hrsh7th/nvim-cmp" })

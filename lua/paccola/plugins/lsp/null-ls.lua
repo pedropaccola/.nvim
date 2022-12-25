@@ -1,10 +1,16 @@
-local setup, null_ls = pcall(require, "null-ls")
-if not setup then
+local null_ok, null_ls = pcall(require, "null-ls")
+if not null_ok then
 	return
 end
 
-local formatting = null_ls.builtins.formatting -- to setup formatters
-local diagnostics = null_ls.builtins.diagnostics -- to setup linters
+local mason_null_ok, mason_null_ls = pcall(require, "mason-null-ls")
+if not mason_null_ok then
+	return
+end
+
+-- null-ls convenience for setup
+local formatting = null_ls.builtins.formatting
+local diagnostics = null_ls.builtins.diagnostics
 
 -- to setup format on save
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
