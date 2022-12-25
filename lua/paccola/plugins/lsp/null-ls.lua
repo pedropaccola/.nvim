@@ -3,11 +3,6 @@ if not null_ok then
 	return
 end
 
-local mason_null_ok, mason_null_ls = pcall(require, "mason-null-ls")
-if not mason_null_ok then
-	return
-end
-
 -- null-ls convenience for setup
 local formatting = null_ls.builtins.formatting
 local diagnostics = null_ls.builtins.diagnostics

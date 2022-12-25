@@ -37,8 +37,10 @@ keymap("n", "<C-u>", "<C-u>zz", opts) --Up and centralize
 -- keymap("i", "jk", "<ESC>", opts) --'jk' fast to exit insert mode
 
 -- Move text up and down
-keymap("n", "<a-j>", ":m .+1<CR>==", opts)
-keymap("n", "<a-k>", ":m .-2<CR>==", opts)
+keymap("n", "<a-j>", ":m .+1<cr>==", opts)
+keymap("n", "<a-k>", ":m .-2<cr>==", opts)
+keymap("v", "<a-j>", ":m '>+1<CR>gv=gv", opts)
+keymap("v", "<a-k>", ":m '<-2<CR>gv=gv", opts)
 
 -- Resize with arrows
 keymap("n", "<C-up>", ":resize -2<CR>", opts)
