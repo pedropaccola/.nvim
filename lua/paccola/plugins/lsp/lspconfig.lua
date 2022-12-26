@@ -24,6 +24,7 @@ fidget.setup()
 -- Enable keybinds only when lsp server is available
 local on_attach = function(client, bufnr)
 	--general keymaps
+
 	local keymap = vim.keymap.set
 	local opts = { noremap = true, silent = true, buffer = bufnr }
 	keymap("n", "gf", "<cmd>Lspsaga lsp_finder<CR>", opts) -- show definition, references
@@ -64,7 +65,7 @@ end
 local capabilities = cmp_nvim_lsp.default_capabilities()
 
 -- Change diagnostic symbols in the sign column
-local signs = { Error = "", Warn = "", Hint = "", Info = "" }
+local signs = { Error = " ", Warn = " ", Hint = "ﴞ ", Info = " " }
 for type, icon in pairs(signs) do
 	local hl = "DiagnosticSign" .. type
 	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
@@ -142,12 +143,20 @@ lspconfig["gopls"].setup({
 			analyses = {
 				unusedparams = true,
 				shadow = true,
+				fillreturns = true,
+				nonewvars = true,
+				undeclaredname = true,
+				ST1000 = false,
+				ST1005 = false,
 			},
 			staticcheck = true,
+			gofumpt = true,
+			linksInHover = true,
 		},
 	},
 	init_options = {
 		usePlaceholders = true,
+		completeUnimported = true,
 	},
 })
 

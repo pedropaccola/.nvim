@@ -11,12 +11,19 @@ local function clock()
 	return "" .. os.date("%H:%M")
 end
 
+-- local diagnostics = {
+-- 	"diagnostics",
+-- 	sources = { "nvim_diagnostic" },
+-- 	colored = true,
+-- 	always_visible = true,
+-- }
 local diagnostics = {
 	"diagnostics",
 	sources = { "nvim_diagnostic" },
-	sections = { "error", "warn" },
 	colored = true,
 	always_visible = true,
+	sections = { "error", "warn" },
+	symbols = { error = " ", warn = " ", hint = "ﴞ ", info = " " },
 }
 
 local diff = {

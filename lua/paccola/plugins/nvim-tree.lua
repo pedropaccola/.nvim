@@ -56,10 +56,10 @@ nvim_tree.setup({
 		enable = true,
 		show_on_dirs = true,
 		icons = {
-			hint = "",
-			info = "",
-			warning = "",
-			error = "",
+			hint = "ﴞ ",
+			info = " ",
+			warning = " ",
+			error = " ",
 		},
 	},
 	renderer = {
