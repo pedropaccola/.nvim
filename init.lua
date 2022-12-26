@@ -1,3 +1,7 @@
+if vim.g.vscode then
+	return
+end
+
 require("paccola.plugins")
 
 require("paccola.core.options")
