@@ -21,11 +21,15 @@ end
 --fidget
 fidget.setup()
 
+local keymap = vim.keymap.set
+
+-- Enable autocompletion
+local capabilities = cmp_nvim_lsp.default_capabilities()
+local lsp_flags = { debounce_text_changes = 150 }
+
 -- Enable keybinds only when lsp server is available
 local on_attach = function(client, bufnr)
 	--general keymaps
-
-	local keymap = vim.keymap.set
 	local opts = { noremap = true, silent = true, buffer = bufnr }
 	keymap("n", "gf", "<cmd>Lspsaga lsp_finder<CR>", opts) -- show definition, references
 	keymap("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts) -- got to declaration
@@ -47,30 +51,17 @@ local on_attach = function(client, bufnr)
 		keymap("n", "<leader>ru", ":TypescriptRemoveUnused<CR>") -- remove unused variables (not in youtube nvim video)
 	end
 
-	--diagnostics
-	local diag_float_grp = vim.api.nvim_create_augroup("DiagnosticFloat", { clear = true })
-	vim.api.nvim_create_autocmd("CursorHold", {
-		callback = function()
-			vim.diagnostic.open_float(nil, { focusable = false })
-		end,
-		group = diag_float_grp,
-	})
-
-	-- Goto previous/next diagnostic warning/error
-	keymap("n", "g[", vim.diagnostic.goto_prev, opts)
-	keymap("n", "g]", vim.diagnostic.goto_next, opts)
+	-- -- diagnostics float automatically
+	-- local diag_float_grp = vim.api.nvim_create_augroup("DiagnosticFloat", { clear = true })
+	-- vim.api.nvim_create_autocmd("CursorHold", {
+	-- 	callback = function()
+	-- 		vim.diagnostic.open_float(nil, { focusable = false })
+	-- 	end,
+	-- 	group = diag_float_grp,
+	-- })
 end
 
--- Enable autocompletion
-local capabilities = cmp_nvim_lsp.default_capabilities()
-
--- Change diagnostic symbols in the sign column
-local signs = { Error = " ", Warn = " ", Hint = "ﴞ ", Info = " " }
-for type, icon in pairs(signs) do
-	local hl = "DiagnosticSign" .. type
-	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-end
-
+-- Diagnostics
 vim.diagnostic.config({
 	virtual_text = false, --shows diagnistics after text, false because of float window in on_attach function
 	virtual_lines = false,
@@ -88,18 +79,30 @@ vim.diagnostic.config({
 	},
 })
 
+local opts = { noremap = true, silent = true }
+keymap("n", "g[", vim.diagnostic.goto_prev, opts)
+keymap("n", "g]", vim.diagnostic.goto_next, opts)
+keymap("n", "gl", vim.diagnostic.setloclist, opts)
+keymap("n", "ge", vim.diagnostic.open_float, opts)
+
+vim.fn.sign_define("DiagnosticSignError", { name = "DiagnosticSignError", text = "" })
+vim.fn.sign_define("DiagnosticSignWarn", { name = "DiagnosticSignWarn", text = "" })
+vim.fn.sign_define("DiagnosticSignHint", { name = "DiagnosticSignHint", text = "ﴞ" })
+vim.fn.sign_define("DiagnosticSignInfo", { name = "DiagnosticSignInfo", text = "" })
+
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
 	border = "rounded",
 })
-
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
 	border = "rounded",
 })
+vim.lsp.set_log_level("debug")
 
 -- Servers configuration
 lspconfig["html"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
+	lsp_flags = lsp_flags,
 })
 
 typescript.setup({
@@ -112,35 +115,32 @@ typescript.setup({
 lspconfig["cssls"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
+	lsp_flags = lsp_flags,
 })
 
 lspconfig["tailwindcss"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
+	lsp_flags = lsp_flags,
 })
 
 lspconfig["emmet_ls"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
+	lsp_flags = lsp_flags,
 	filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
 })
 
 lspconfig["sumneko_lua"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
-	settings = { -- custom settings for lua
+	lsp_flags = lsp_flags,
+	settings = {
 		Lua = {
-			-- make the language server recognize "vim" global
-			diagnostics = {
-				globals = { "vim" },
-			},
-			workspace = {
-				-- make language server aware of runtime files
-				library = {
-					[vim.fn.expand("$VIMRUNTIME/lua")] = true,
-					[vim.fn.stdpath("config") .. "/lua"] = true,
-				},
-			},
+			runtime = { version = "LuaJIT" },
+			diagnostics = { globals = { "vim", "P" } },
+			workspace = { library = vim.api.nvim_get_runtime_file("", true), checkThirdParty = false },
+			telemetry = { false },
 		},
 	},
 })
@@ -148,6 +148,7 @@ lspconfig["sumneko_lua"].setup({
 lspconfig["gopls"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
+	lsp_flags = lsp_flags,
 	filetypes = { "go", "gomod" },
 	settings = {
 		gopls = {
@@ -174,6 +175,7 @@ lspconfig["gopls"].setup({
 lspconfig["rust_analyzer"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
+	lsp_flags = lsp_flags,
 	settings = {
 		["rust-analyzer"] = {
 			checkOnSave = {
@@ -200,4 +202,5 @@ lspconfig["rust_analyzer"].setup({
 lspconfig["taplo"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
+	lsp_flags = lsp_flags,
 })
