@@ -40,6 +40,9 @@ require('packer').startup(function(use)
 
 			--VSCode-like pictograms
 			'onsails/lspkind.nvim',
+
+			--Formatter on save
+			'lukas-reineke/lsp-format.nvim'
 		},
 	}
 

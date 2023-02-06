@@ -1,35 +1,17 @@
-require('fidget').setup()
+local fidget = require 'fidget'
+local neodev = require 'neodev'
+local lsp_format = require 'lsp-format'
 
-require('neodev').setup({
-	library = {
-	  enabled = true, -- when not enabled, neodev will not change any settings to the LSP server
-	  -- these settings will be used for your Neovim config directory
-	  runtime = true, -- runtime path
-	  types = true, -- full signature, docs and completion of vim.api, vim.treesitter, vim.lsp and others
-	  plugins = true, -- installed opt or start plugins in packpath
-	  -- you can also specify the list of plugins to make available as a workspace library
-	  -- plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim" },
-	},
-	setup_jsonls = true, -- configures jsonls to provide completion for project specific .luarc.json files
-	-- for your Neovim config directory, the config.library settings will be used as is
-	-- for plugin directories (root_dirs having a /lua directory), config.library.plugins will be disabled
-	-- for any other directory, config.library.enabled will be set to false
-
-	-- With lspconfig, Neodev will automatically setup your lua-language-server
-	-- If you disable this, then you have to set {before_init=require("neodev.lsp").before_init}
-	-- in your lsp start options
-	lspconfig = true,
-	-- much faster, but needs a recent built of lua-language-server
-	-- needs lua-language-server >= 3.6.0
-	pathStrict = true,
-})
+fidget.setup()
+neodev.setup()
+lsp_format.setup {}
 
 -- Enable autocompletion
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Enable keybinds only when lsp server is available
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
 
 	local nmap = function(keys, func, desc)
 		if desc then
@@ -37,6 +19,7 @@ local on_attach = function(_, bufnr)
 		end
 		vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
 	end
+
 	--general keymaps
 	nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 	nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
@@ -56,20 +39,13 @@ local on_attach = function(_, bufnr)
 	nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
 	nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
 	nmap('<leader>wl', function()
-	  print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 	end, '[W]orkspace [L]ist Folders')
 
-	-- Create a command `:Format` local to the LSP buffer
-	vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-		vim.lsp.buf.format()
-	end, { desc = 'Format current buffer with LSP' })
+	lsp_format.on_attach(client)
 end
 
 -- Enable the following language servers
---  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
---
---  Add any additional override configuration in the following tables. They will be passed to
---  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
 	html = {},
 	tsserver = {},
@@ -78,18 +54,22 @@ local servers = {
 	emmet_ls = {},
 	gopls = {
 		gopls = {
-			analyses = {
-				unusedparams = true,
-				shadow = true,
-				fillreturns = true,
-				nonewvars = true,
-				undeclaredname = true,
-				ST1000 = false,
-				ST1005 = false,
-			},
-			staticcheck = true,
 			gofumpt = true,
-			linksInHover = true,
+			usePlaceholders = true,
+			analyses = {
+				nilness = true,
+				shadow = true,
+				unusedparams = true,
+				unusedwrites = true,
+			},
+			hints = {
+				assignVariableTypes = true,
+				compositeLiteralFields = true,
+				constantValues = true,
+				functionTypeParameters = true,
+				parameterNames = true,
+				rangeVariableTypes = true,
+			},
 		},
 	},
 	rust_analyzer = {
@@ -125,7 +105,7 @@ local servers = {
 
 -- Diagnostics
 vim.diagnostic.config({
-	virtual_text = true, --shows diagnistics after text, false because of float window in on_attach function
+	virtual_text = true, --shows diagnostics after text, false because of float window in on_attach function
 	virtual_lines = false,
 	signs = true,
 	update_in_insert = true,
@@ -140,7 +120,6 @@ vim.diagnostic.config({
 		prefix = "",
 	},
 })
-
 vim.fn.sign_define("DiagnosticSignError", { name = "DiagnosticSignError", text = "" })
 vim.fn.sign_define("DiagnosticSignWarn", { name = "DiagnosticSignWarn", text = "" })
 vim.fn.sign_define("DiagnosticSignHint", { name = "DiagnosticSignHint", text = "ﴞ" })
@@ -158,6 +137,6 @@ require('mason-lspconfig').setup_handlers {
 			capabilities = capabilities,
 			on_attach = on_attach,
 			settings = servers[server_name],
-	}
+		}
 	end,
 }
