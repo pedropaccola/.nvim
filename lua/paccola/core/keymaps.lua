@@ -65,25 +65,31 @@ keymap("v", ">", ">gv", opts)
 -- Plugin Keymaps
 ---------------------
 
+-- Diagnostics
+keymap("n", "[d", vim.diagnostic.goto_prev)
+keymap("n", "]d", vim.diagnostic.goto_next)
+keymap("n", "<leader>q", vim.diagnostic.setloclist)
+keymap("n", "<leader>e", vim.diagnostic.open_float)
+
 -- Nvim-Tree
-keymap("n", "<leader>e", ":NvimTreeToggle<CR>", opts)
+keymap("n", "<leader>t", ":NvimTreeToggle<CR>", opts)
 
--- Telescope
-keymap("n", "<leader>ff", "<cmd>Telescope find_files<CR>")
-keymap("n", "<leader>fg", "<cmd>Telescope live_grep<CR>")
-keymap("n", "<leader>fs", "<cmd>Telescope git_status<CR>")
-keymap("n", "<leader>fh", "<cmd>Telescope oldfiles<CR>")
-keymap("n", "<leader>fb", "<cmd>Telescope buffers<CR>")
-keymap("n", "<leader>fw", "<cmd>Telescope grep_string<CR>")
-keymap("n", "<leader>fd", "<cmd>Telescope diagnostics<CR>")
-keymap("n", "<leader>gc", "<cmd>Telescope git_commits<cr>")
-keymap("n", "<leader>gfc", "<cmd>Telescope git_bcommits<cr>")
-keymap("n", "<leader>gb", "<cmd>Telescope git_branches<cr>")
-keymap("n", "<leader>gs", "<cmd>Telescope git_status<cr>")
-
--- Comment
-keymap("n", "<leader>k", ":Commentary<CR>")
-keymap("v", "<leader>k", ":Commentary<CR>")
+-- Telescope (See `:help telescope.builtin`)
+local telescope = require('telescope.builtin')
+keymap('n', '<leader>?', telescope.oldfiles, { desc = '[?] Find recently opened files' })
+keymap('n', '<leader><space>', telescope.buffers, { desc = '[ ] Find existing buffers' })
+keymap('n', '<leader>/', function()
+  -- You can pass additional configuration to telescope to change theme, layout, etc.
+	telescope.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+    winblend = 10,
+    previewer = false,
+  })
+end, { desc = '[/] Fuzzily search in current buffer]' })
+keymap('n', '<leader>sf', telescope.find_files, { desc = '[S]earch [F]iles' })
+keymap('n', '<leader>sh', telescope.help_tags, { desc = '[S]earch [H]elp' })
+keymap('n', '<leader>sw', telescope.grep_string, { desc = '[S]earch current [W]ord' })
+keymap('n', '<leader>sg', telescope.live_grep, { desc = '[S]earch by [G]rep' })
+keymap('n', '<leader>sd', telescope.diagnostics, { desc = '[S]earch [D]iagnostics' })
 
 -- Toggleterm
 function _G.set_terminal_keymaps()

@@ -1,156 +1,82 @@
-local lspconfig_status, lspconfig = pcall(require, "lspconfig")
-if not lspconfig_status then
-	return
-end
+require('fidget').setup()
 
-local cmp_nvim_lsp_status, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-if not cmp_nvim_lsp_status then
-	return
-end
+require('neodev').setup({
+	library = {
+	  enabled = true, -- when not enabled, neodev will not change any settings to the LSP server
+	  -- these settings will be used for your Neovim config directory
+	  runtime = true, -- runtime path
+	  types = true, -- full signature, docs and completion of vim.api, vim.treesitter, vim.lsp and others
+	  plugins = true, -- installed opt or start plugins in packpath
+	  -- you can also specify the list of plugins to make available as a workspace library
+	  -- plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim" },
+	},
+	setup_jsonls = true, -- configures jsonls to provide completion for project specific .luarc.json files
+	-- for your Neovim config directory, the config.library settings will be used as is
+	-- for plugin directories (root_dirs having a /lua directory), config.library.plugins will be disabled
+	-- for any other directory, config.library.enabled will be set to false
 
-local fidget_status, fidget = pcall(require, "fidget")
-if not fidget_status then
-	return
-end
-
-local typescript_status, typescript = pcall(require, "typescript")
-if not typescript_status then
-	return
-end
-
---fidget
-fidget.setup()
-
-local keymap = vim.keymap.set
+	-- With lspconfig, Neodev will automatically setup your lua-language-server
+	-- If you disable this, then you have to set {before_init=require("neodev.lsp").before_init}
+	-- in your lsp start options
+	lspconfig = true,
+	-- much faster, but needs a recent built of lua-language-server
+	-- needs lua-language-server >= 3.6.0
+	pathStrict = true,
+})
 
 -- Enable autocompletion
-local capabilities = cmp_nvim_lsp.default_capabilities()
-local lsp_flags = { debounce_text_changes = 150 }
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Enable keybinds only when lsp server is available
-local on_attach = function(client, bufnr)
-	--general keymaps
-	local opts = { noremap = true, silent = true, buffer = bufnr }
-	keymap("n", "gf", "<cmd>Lspsaga lsp_finder<CR>", opts) -- show definition, references
-	keymap("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts) -- got to declaration
-	keymap("n", "gd", "<cmd>Lspsaga peek_definition<CR>", opts) -- see definition and make edits in window
-	keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts) -- go to implementation
-	keymap("n", "<leader>ca", "<cmd>Lspsaga code_action<CR>", opts) -- see available code actions
-	keymap("n", "<leader>rn", "<cmd>Lspsaga rename<CR>", opts) -- smart rename
-	keymap("n", "<leader>D", "<cmd>Lspsaga show_line_diagnostics<CR>", opts) -- show  diagnostics for line
-	keymap("n", "<leader>d", "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts) -- show diagnostics for cursor
-	keymap("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts) -- jump to previous diagnostic in buffer
-	keymap("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts) -- jump to next diagnostic in buffer
-	keymap("n", "K", "<cmd>Lspsaga hover_doc<CR>", opts) -- show documentation for what is under cursor
-	keymap("n", "<leader>o", "<cmd>LSoutlineToggle<CR>", opts) -- see outline on right hand side
+local on_attach = function(_, bufnr)
 
-	--typescript specific keymaps
-	if client.name == "tsserver" then
-		keymap("n", "<leader>rf", ":TypescriptRenameFile<CR>") -- rename file and update imports
-		keymap("n", "<leader>oi", ":TypescriptOrganizeImports<CR>") -- organize imports (not in youtube nvim video)
-		keymap("n", "<leader>ru", ":TypescriptRemoveUnused<CR>") -- remove unused variables (not in youtube nvim video)
+	local nmap = function(keys, func, desc)
+		if desc then
+			desc = 'LSP: ' .. desc
+		end
+		vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
 	end
+	--general keymaps
+	nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+	nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+	nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+	nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+	nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+	nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
+	nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+	nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
-	-- -- diagnostics float automatically
-	-- local diag_float_grp = vim.api.nvim_create_augroup("DiagnosticFloat", { clear = true })
-	-- vim.api.nvim_create_autocmd("CursorHold", {
-	-- 	callback = function()
-	-- 		vim.diagnostic.open_float(nil, { focusable = false })
-	-- 	end,
-	-- 	group = diag_float_grp,
-	-- })
+	-- See `:help K` for why this keymap
+	nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+	nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+
+	-- Lesser used LSP functionality
+	nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+	nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+	nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+	nmap('<leader>wl', function()
+	  print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+	end, '[W]orkspace [L]ist Folders')
+
+	-- Create a command `:Format` local to the LSP buffer
+	vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+		vim.lsp.buf.format()
+	end, { desc = 'Format current buffer with LSP' })
 end
 
--- Diagnostics
-vim.diagnostic.config({
-	virtual_text = false, --shows diagnistics after text, false because of float window in on_attach function
-	virtual_lines = false,
-	signs = true,
-	update_in_insert = true,
-	underline = true,
-	severity_sort = true,
-	float = {
-		focusable = true,
-		border = "rounded",
-		style = "minimal",
-		source = "always",
-		header = "",
-		prefix = "",
-	},
-})
-
-local opts = { noremap = true, silent = true }
-keymap("n", "g[", vim.diagnostic.goto_prev, opts)
-keymap("n", "g]", vim.diagnostic.goto_next, opts)
-keymap("n", "gl", vim.diagnostic.setloclist, opts)
-keymap("n", "ge", vim.diagnostic.open_float, opts)
-
-vim.fn.sign_define("DiagnosticSignError", { name = "DiagnosticSignError", text = "" })
-vim.fn.sign_define("DiagnosticSignWarn", { name = "DiagnosticSignWarn", text = "" })
-vim.fn.sign_define("DiagnosticSignHint", { name = "DiagnosticSignHint", text = "ﴞ" })
-vim.fn.sign_define("DiagnosticSignInfo", { name = "DiagnosticSignInfo", text = "" })
-
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-	border = "rounded",
-})
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-	border = "rounded",
-})
-vim.lsp.set_log_level("debug")
-
--- Servers configuration
-lspconfig["html"].setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-	lsp_flags = lsp_flags,
-})
-
-typescript.setup({
-	server = {
-		capabilities = capabilities,
-		on_attach = on_attach,
-	},
-})
-
-lspconfig["cssls"].setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-	lsp_flags = lsp_flags,
-})
-
-lspconfig["tailwindcss"].setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-	lsp_flags = lsp_flags,
-})
-
-lspconfig["emmet_ls"].setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-	lsp_flags = lsp_flags,
-	filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
-})
-
-lspconfig["sumneko_lua"].setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-	lsp_flags = lsp_flags,
-	settings = {
-		Lua = {
-			runtime = { version = "LuaJIT" },
-			diagnostics = { globals = { "vim", "P" } },
-			workspace = { library = vim.api.nvim_get_runtime_file("", true), checkThirdParty = false },
-			telemetry = { false },
-		},
-	},
-})
-
-lspconfig["gopls"].setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-	lsp_flags = lsp_flags,
-	filetypes = { "go", "gomod" },
-	settings = {
+-- Enable the following language servers
+--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
+--
+--  Add any additional override configuration in the following tables. They will be passed to
+--  the `settings` field of the server config. You must look up that documentation yourself.
+local servers = {
+	html = {},
+	tsserver = {},
+	bashls = {},
+	tailwindcss = {},
+	emmet_ls = {},
+	gopls = {
 		gopls = {
 			analyses = {
 				unusedparams = true,
@@ -166,17 +92,7 @@ lspconfig["gopls"].setup({
 			linksInHover = true,
 		},
 	},
-	init_options = {
-		usePlaceholders = true,
-		completeUnimported = true,
-	},
-})
-
-lspconfig["rust_analyzer"].setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-	lsp_flags = lsp_flags,
-	settings = {
+	rust_analyzer = {
 		["rust-analyzer"] = {
 			checkOnSave = {
 				command = "clippy",
@@ -197,10 +113,51 @@ lspconfig["rust_analyzer"].setup({
 			},
 		},
 	},
+	taplo = {},
+	-- pyright = {},
+	sumneko_lua = {
+		Lua = {
+			workspace = { checkThirdParty = false },
+			telemetry = { enable = false },
+		},
+	},
+}
+
+-- Diagnostics
+vim.diagnostic.config({
+	virtual_text = true, --shows diagnistics after text, false because of float window in on_attach function
+	virtual_lines = false,
+	signs = true,
+	update_in_insert = true,
+	underline = true,
+	severity_sort = true,
+	float = {
+		focusable = true,
+		border = "rounded",
+		style = "minimal",
+		source = "always",
+		header = "",
+		prefix = "",
+	},
 })
 
-lspconfig["taplo"].setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-	lsp_flags = lsp_flags,
+vim.fn.sign_define("DiagnosticSignError", { name = "DiagnosticSignError", text = "" })
+vim.fn.sign_define("DiagnosticSignWarn", { name = "DiagnosticSignWarn", text = "" })
+vim.fn.sign_define("DiagnosticSignHint", { name = "DiagnosticSignHint", text = "ﴞ" })
+vim.fn.sign_define("DiagnosticSignInfo", { name = "DiagnosticSignInfo", text = "" })
+
+--Mason
+require('mason').setup()
+
+require('mason-lspconfig').setup({
+	ensure_installed = vim.tbl_keys(servers),
 })
+require('mason-lspconfig').setup_handlers {
+	function(server_name)
+		require('lspconfig')[server_name].setup {
+			capabilities = capabilities,
+			on_attach = on_attach,
+			settings = servers[server_name],
+	}
+	end,
+}
