@@ -80,24 +80,35 @@ vim.keymap.set("v", "<", "<gv", { noremap = true })
 vim.keymap.set("v", ">", ">gv", { noremap = true })
 
 -- See `:help telescope.builtin`
-vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
-vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>p', builtin.find_files, { desc = '[S]earch [F]iles' })
+vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
+vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
+vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
+
+vim.keymap.set('n', '<leader>?', builtin.oldfiles, { desc = '[?] Find recently opened files' })
+vim.keymap.set('n', '<leader><space>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 vim.keymap.set('n', '<leader>f', function()
-	require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+	builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
 		winblend = 10,
 		previewer = false,
 	})
 end, { desc = '[/] Fuzzily search in current buffer' })
 
-vim.keymap.set('n', '<leader>p', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
-vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
-vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
-vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
-vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
-
 -- TREESITTER
 require 'nvim-treesitter.configs'.setup {
-	ensure_installed = { "bash", "c", "lua", "vim", "go", "javascript", "typescript", "rust" },
+	ensure_installed = { 
+        "bash",
+        "c",
+        "lua",
+        "json",
+        "markdown",
+        "vim",
+        "go",
+        "javascript",
+        "typescript",
+        "rust" },
 	highlight = {
 		enable = true,
 	}
@@ -248,11 +259,20 @@ local lsp = require("lsp-zero")
 lsp.preset("recommended")
 
 lsp.ensure_installed({
+    -- web
+    "html",
 	"tsserver",
-	"gopls",
+    "cssls",
+    "tailwindcss",
 	"eslint",
+    "jsonls",
+    "marksman",
+
+    -- other
+	"gopls",
 	"rust_analyzer",
 	"bashls",
+    "lua_ls",
 })
 
 lsp.set_preferences({
@@ -273,22 +293,28 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 	underline = false,
 })
 
-vim.o.background = "dark"
-
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
+vim.opt.background = "dark"
+vim.opt.breakindent = true
+vim.opt.completeopt = 'menu,menuone,noselect'
+vim.opt.expandtab = true
+vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
+vim.opt.hlsearch = true
+vim.opt.ignorecase = true
+vim.opt.mouse = 'a'
 vim.opt.number = false
 vim.opt.relativenumber = true
+vim.opt.shiftwidth = 4
+vim.opt.showmatch = true 
+vim.opt.smartcase = true
+vim.opt.smarttab = true
+vim.opt.smartindent = true
 vim.opt.swapfile = false
-vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
-
-vim.o.hlsearch = true
-vim.o.mouse = 'a'
-vim.o.breakindent = true
-vim.o.undofile = true
-vim.o.ignorecase = true
-vim.o.updatetime = 250
-vim.o.timeout = true
-vim.o.timeoutlen = 300
-vim.o.completeopt = 'menu,menuone,noselect'
+vim.opt.tabstop = 4
+vim.opt.ttimeout = true
+vim.opt.ttimeoutlen = 10
+vim.opt.timeout = true
+vim.opt.timeoutlen = 300
+vim.opt.updatetime = 250
+vim.opt.undofile = true
+vim.opt.termguicolors = true
 
