@@ -40,7 +40,12 @@ require("packer").startup(function(use)
 			{ 'rafamadriz/friendly-snippets' }, -- Optional
 		},
 		use { "akinsho/toggleterm.nvim", tag = '*' },
-		use "terrortylor/nvim-comment",
+		use {
+    		'numToStr/Comment.nvim',
+    		config = function()
+        		require('Comment').setup()
+    		end
+			},
 		use "windwp/nvim-autopairs",
 	}
 end)
@@ -92,7 +97,7 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 
 -- TREESITTER
 require 'nvim-treesitter.configs'.setup {
-	ensure_installed = { "c", "lua", "vim", "go", "javascript", "typescript", "rust" },
+	ensure_installed = { "bash", "c", "lua", "vim", "go", "javascript", "typescript", "rust" },
 	highlight = {
 		enable = true,
 	}
@@ -229,10 +234,6 @@ require('nvim-autopairs').setup({
 })
 require('cmp').event:on("confirm_done", require('nvim-autopairs.completion.cmp').on_confirm_done({ map_char = { tex = "" } }))
 
--- COMMENT
-require("nvim_comment").setup({
-	operator_mapping = "<leader>/"
-})
 
 -- TERMINAL SETUP
 require("toggleterm").setup {
@@ -251,6 +252,7 @@ lsp.ensure_installed({
 	"gopls",
 	"eslint",
 	"rust_analyzer",
+	"bashls",
 })
 
 lsp.set_preferences({
@@ -278,17 +280,15 @@ vim.opt.shiftwidth = 4
 vim.opt.number = false
 vim.opt.relativenumber = true
 vim.opt.swapfile = false
-vim.opt.guicursor = "i:block"
+vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
 
 vim.o.hlsearch = true
 vim.o.mouse = 'a'
 vim.o.breakindent = true
 vim.o.undofile = true
 vim.o.ignorecase = true
-vim.o.smartcase= true
 vim.o.updatetime = 250
 vim.o.timeout = true
 vim.o.timeoutlen = 300
---vim.o.completeopt = 'menuone,noselect'
-vim.o.termguicolors = true
-vim.o.guifont = "Fira Code:h15"
+vim.o.completeopt = 'menu,menuone,noselect'
+
