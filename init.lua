@@ -51,7 +51,7 @@ require("packer").startup(function(use)
 end)
 
 -- some
-vim.keymap.set("n", "<M-b>", ":Ex<CR>")
+vim.keymap.set("n", "<M-b>", ":Ex<CR>") -- <M-b> = <Alt-b>
 
 -- split screen and navigation
 vim.keymap.set("n", "<leader>v", ":vsplit<CR><C-w>l", { noremap = true })
@@ -231,20 +231,18 @@ require('nvim-autopairs').setup({
 		java = false,
 	},
 	disable_filetype = { "TelescopePrompt", "spectre_panel" },
+    enable_check_bracket_line = false,
 	fast_wrap = {
-		map = "<M-e>",
-		chars = { "{", "[", "(", '"', "'" },
-		pattern = string.gsub([[ [%'%"%)%>%]%)%}%,] ]], "%s+", ""),
-		offset = 0, -- Offset from pattern match
-		end_key = "$",
-		keys = "qwertyuiopzxcvbnmasdfghjkl",
-		check_comma = true,
-		highlight = "PmenuSel",
-		highlight_grey = "LineNr",
+      map = '<M-e>',
+      chars = { '{', '[', '(', '"', "'" },
+      pattern = [=[[%'%"%>%]%)%}%,]]=],
+      end_key = '$',
+      keys = 'qwertyuiopzxcvbnmasdfghjkl',
+      check_comma = true,
+      highlight = 'Search',
+      highlight_grey='Comment'
 	},
 })
-require('cmp').event:on("confirm_done", require('nvim-autopairs.completion.cmp').on_confirm_done({ map_char = { tex = "" } }))
-
 
 -- TERMINAL SETUP
 require("toggleterm").setup {
