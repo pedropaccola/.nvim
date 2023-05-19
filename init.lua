@@ -32,12 +32,7 @@ require("packer").startup(function(use)
 			{ 'williamboman/mason-lspconfig.nvim' }, -- Optional
 			{ 'hrsh7th/nvim-cmp' }, -- Required
 			{ 'hrsh7th/cmp-nvim-lsp' }, -- Required
-			{ 'hrsh7th/cmp-buffer' }, -- Optional
-			{ 'hrsh7th/cmp-path' }, -- Optional
-			{ 'saadparwaiz1/cmp_luasnip' }, -- Optional
-			{ 'hrsh7th/cmp-nvim-lua' }, -- Optional
 			{ 'L3MON4D3/LuaSnip' }, -- Required
-			{ 'rafamadriz/friendly-snippets' }, -- Optional
 		},
 		use { "akinsho/toggleterm.nvim", tag = '*' },
 		use {
@@ -100,6 +95,7 @@ end, { desc = '[/] Fuzzily search in current buffer' })
 require 'nvim-treesitter.configs'.setup {
 	ensure_installed = { 
         "bash",
+        "cpp",
         "c",
         "lua",
         "json",
@@ -256,6 +252,10 @@ local lsp = require("lsp-zero")
 
 lsp.preset("recommended")
 
+lsp.set_preferences({
+    set_lsp_keymaps = false,	
+})
+
 lsp.ensure_installed({
     -- web
     "html",
@@ -271,11 +271,9 @@ lsp.ensure_installed({
 	"rust_analyzer",
 	"bashls",
     "lua_ls",
+    "clangd",
 })
 
-lsp.set_preferences({
-	sign_icons = {}
-})
 
 lsp.on_attach(function(client, bufnr)
 	local opts = { buffer = bufnr, remap = false }
