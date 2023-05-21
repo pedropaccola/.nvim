@@ -356,4 +356,5 @@ vim.opt.timeout = true
 vim.opt.timeoutlen = 300
 vim.opt.updatetime = 250
 vim.opt.undofile = true
+vim.opt.softtabstop = 4
 vim.opt.termguicolors = true
