@@ -247,7 +247,8 @@ require('nvim-autopairs').setup({
 require("toggleterm").setup {
     direction = "horizontal",
     size = 15,
-    open_mapping = [[<leader>j]]
+    open_mapping = [[<leader>j]],
+    insert_mappings = false,
 }
 
 -- LSP
