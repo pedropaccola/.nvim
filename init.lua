@@ -281,7 +281,7 @@ require('lazy').setup({
           ['clangd'] = { 'cpp', 'c' },
           ['bashls'] = { 'bash' },
           ['gopls'] = { 'go' },
-          ['esling'] = { 'javascript', 'typescript' },
+          ['eslint'] = { 'javascript', 'typescript' },
           ['cssls'] = { 'css' },
           ['html'] = { 'html' },
           ['jsonls'] = { 'json' },
