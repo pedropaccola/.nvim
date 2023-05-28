@@ -111,7 +111,8 @@ require('lazy').setup({
         'go',
         'javascript',
         'typescript',
-        'rust'
+        'rust',
+        'python',
       },
       highlight = {
         enable = true,
@@ -260,15 +261,37 @@ require('lazy').setup({
       {
         'williamboman/mason-lspconfig.nvim',
         config = true,
+        opts = {
+          ensure_installed = { 'bashls', 'clangd', 'cssls', 'eslint', 'gopls', 'html', 'jsonls', 'lua_ls', 'marksman',
+            'pyright', 'rust_analyzer', 'tailwindcss', 'taplo', 'tsserver', 'yamlls' },
+        },
       },
     },
     config = function()
       -- This is where all the LSP shenanigans will live
       local lsp = require('lsp-zero')
+      local lspconf = require('lspconfig')
 
       lsp.on_attach(function(client, bufnr)
         lsp.default_keymaps({ buffer = bufnr })
       end)
+
+      lspconf.lua_ls.setup(lsp.nvim_lua_ls())
+
+      lspconf.efm.setup({
+        init_options = { documentFormatting = true },
+        filetypes = { 'sh' },
+        settings = {
+          rootMarkers = { '.git' },
+          languages = {
+            sh = {
+              lintCommand = 'shellcheck -f gcc -x',
+              lintSource = 'shellcheck',
+              lintFormats = { '%f:%l:%c: %trror: %m', '%f:%l:%c: %tarning: %m', '%f:%l:%c: %tote: %m' },
+            },
+          },
+        },
+      })
 
       lsp.format_on_save({
         format_opts = {
@@ -289,13 +312,10 @@ require('lazy').setup({
           -- if you have a working setup with null-ls
           -- you can specify filetypes it can format.
           -- ['null-ls'] = {'javascript', 'typescript'},
+
+          lsp.setup()
         },
       })
-
-      -- (Optional) Configure lua language server for neovim
-      require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
-
-      lsp.setup()
     end
   },
 })
