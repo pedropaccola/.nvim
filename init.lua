@@ -6,6 +6,7 @@ vim.opt.completeopt = 'menuone,noselect'
 vim.opt.expandtab = true
 vim.opt.guicursor =
 "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
+vim.opt.guifont = { "FiraCode Nerd Font", "h15" }
 vim.opt.hlsearch = true
 vim.opt.ignorecase = true
 vim.opt.mouse = 'a'
@@ -139,7 +140,11 @@ require('lazy').setup({
 
   {
     'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    dependencies = {
+      {
+        'nvim-tree/nvim-web-devicons',
+        config = true
+      }, },
     opts = {
       options = {
         globalstatus = true,
@@ -148,10 +153,7 @@ require('lazy').setup({
       },
       sections = {
         lualine_a = { 'mode' },
-        lualine_b = { 'branch', 'diff', {
-          'diagnostics',
-          symbols = { error = 'E', warn = 'W', info = 'I', hint = 'H' },
-        }, },
+        lualine_b = { 'branch', 'diff', 'diagnostics' },
         lualine_c = { 'filename' },
         lualine_x = { 'encoding', 'filetype', {
           'datetime',
@@ -165,6 +167,10 @@ require('lazy').setup({
 
   { 'fatih/vim-go' },
 
+  {
+    'lewis6991/gitsigns.nvim',
+    config = true,
+  },
 
   {
     'akinsho/toggleterm.nvim',
