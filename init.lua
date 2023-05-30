@@ -299,6 +299,20 @@ require('lazy').setup({
         },
       })
 
+      lspconf.pyrightc.setup({
+        cmd = { "pyright-langserver", "--stdio" },
+        filetypes = { 'python' },
+        settings = {
+          python = {
+            analysis = {
+              autoSearchPaths = true,
+              diagnosticMode = "workspace",
+              useLibraryCodeForTypes = true
+            },
+          },
+        },
+      })
+
       lsp.format_on_save({
         format_opts = {
           async = false,
@@ -315,6 +329,7 @@ require('lazy').setup({
           ['html'] = { 'html' },
           ['jsonls'] = { 'json' },
           ['marksman'] = { 'markdown' },
+          ['pyright'] = { 'python' },
           -- if you have a working setup with null-ls
           -- you can specify filetypes it can format.
           -- ['null-ls'] = {'javascript', 'typescript'},
