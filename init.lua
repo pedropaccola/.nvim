@@ -284,35 +284,6 @@ require('lazy').setup({
 
       lspconf.lua_ls.setup(lsp.nvim_lua_ls())
 
-      lspconf.efm.setup({
-        init_options = { documentFormatting = true },
-        filetypes = { 'sh' },
-        settings = {
-          rootMarkers = { '.git' },
-          languages = {
-            sh = {
-              lintCommand = 'shellcheck -f gcc -x',
-              lintSource = 'shellcheck',
-              lintFormats = { '%f:%l:%c: %trror: %m', '%f:%l:%c: %tarning: %m', '%f:%l:%c: %tote: %m' },
-            },
-          },
-        },
-      })
-
-      lspconf.pyrightc.setup({
-        cmd = { "pyright-langserver", "--stdio" },
-        filetypes = { 'python' },
-        settings = {
-          python = {
-            analysis = {
-              autoSearchPaths = true,
-              diagnosticMode = "workspace",
-              useLibraryCodeForTypes = true
-            },
-          },
-        },
-      })
-
       lsp.format_on_save({
         format_opts = {
           async = false,
