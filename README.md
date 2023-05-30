@@ -3,12 +3,7 @@
 ### Requirements
 
 - [Neovim](https://github.com/neovim/neovim) >= 0.8.0
-- [Ripgrep](https://github.com/BurntSushi/ripgrep) for Telescope
-- [NerdFont](https://www.nerdfonts.com/)
-
-```
-sudo apt install ripgrep
-```
+- [NerdFont](https://www.nerdfonts.com/) == FireCode Nerd Font
 
 ### Installation
 
@@ -18,7 +13,7 @@ Make sure to remove or move your current `nvim` directory
 git clone https://github.com/pedropaccola/.nvim.git ~/.config/nvim
 ```
 
-Run `nvim` then `:PackerInstall` wait for the plugins to be installed
+Run `nvim` then wait for lazy.nvim to install all plugins
 
 ---
 
