@@ -1,11 +1,6 @@
-## .nvim
+# .nvim
 
-### Requirements
-
-- [Neovim](https://github.com/neovim/neovim) >= 0.8.0
-- [NerdFont](https://www.nerdfonts.com/) == FireCode Nerd Font
-
-### Installation
+## Installation
 
 Make sure to remove or move your current `nvim` directory
 
@@ -25,3 +20,4 @@ Repositories that helped me building this:
 - [folke/dot](https://github.com/folke/dot/tree/master/nvim)
 - [josean-dev/dev-environment-files](https://github.com/josean-dev/dev-environment-files/tree/main/.config/nvim)
 - [anthdm/.nvim](https://github.com/anthdm/.nvim)
+- [mrquantumcodes/nvim](https://github.com/mrquantumcodes/nvim)
