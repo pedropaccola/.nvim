@@ -1,6 +1,5 @@
 # .nvim
 
-
 ## Installation
 
 Make sure to remove or move your current `nvim` directory
