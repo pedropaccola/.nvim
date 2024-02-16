@@ -9,8 +9,13 @@ vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 
 -- Navigate buffers
 vim.keymap.set("n", "<C-M-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
-vim.keymap.set("n", "<C-M-h>", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
 -- vim.keymap.set("n", "<Tab>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+vim.keymap.set("n", "<C-M-h>", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
+vim.keymap.set("n", "<C-M-w>", "<cmd>bd!<cr><esc>", { desc = "Close buffer" })
+-- vim.keymap.set({ "i", "v", "n" }, "<C-w>", "<cmd>bd<cr><esc>", { desc = "Close buffer" })
+
+-- Exit terminal mode
+vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]])
 
 -- Better move
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
@@ -30,10 +35,6 @@ vim.keymap.set("i", "<C-M-j>", "<Esc>:m .+1<cr>==gi", { desc = "Move down" })
 vim.keymap.set("n", "<C-M-k>", ":m .-2<cr>==", { desc = "Move up" })
 vim.keymap.set("v", "<C-M-k>", ":m '<-2<cr>gv=gv", { desc = "Move up" })
 vim.keymap.set("i", "<C-M-k>", "<Esc>:m .-2<cr>==gi", { desc = "Move up" })
-
--- Close buffer
--- vim.keymap.set({ "i", "v", "n" }, "<C-w>", "<cmd>bd<cr><esc>", { desc = "Close buffer" })
-vim.keymap.set({ "i", "v", "n" }, "<C-M-w>", "<cmd>bd!<cr><esc>", { desc = "Close buffer" })
 
 -- LSP formatting
 vim.keymap.set("n", "<C-M-f>", function()
