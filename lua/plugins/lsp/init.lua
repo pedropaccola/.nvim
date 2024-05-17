@@ -24,6 +24,15 @@ return {
                         capabilities = lsp_utils.capabilities,
                     })
                 end,
+                ["groovyls"] = function()
+                    lspconfig.pyright.setup({
+                        on_attach = lsp_utils.on_attach,
+                        capabilities = lsp_utils.capabilities,
+                        settings = {
+                            filetypes = { "groovy", "jenkinsfile" },
+                        },
+                    })
+                end,
                 ["pyright"] = function()
                     lspconfig.pyright.setup({
                         on_attach = lsp_utils.on_attach,

@@ -22,6 +22,7 @@ vim.opt.timeoutlen     = 300
 vim.opt.laststatus     = 2    -- always show statusline
 -- vim.opt.syntax         = "on"
 vim.opt.splitkeep      = "screen"
+vim.opt.fixendofline   = false
 
 vim.opt.ignorecase = true  -- case insensitive
 vim.opt.smartcase  = true  -- case sensitive if capital letter in search
@@ -31,8 +32,8 @@ vim.opt.signcolumn     = "yes"
 vim.opt.number         = true
 vim.opt.relativenumber = true
 
-vim.opt.tabstop     = 4
-vim.opt.shiftwidth  = 4
+vim.opt.tabstop     = 2
+vim.opt.shiftwidth  = 2
 vim.opt.expandtab   = true
 vim.opt.smartindent = true
 vim.opt.autoindent  = true

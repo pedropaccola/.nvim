@@ -34,6 +34,7 @@ local M = {
             "gomod",
             "gosum",
             "graphql",
+            "groovy",
             "html",
             "http",
             "javascript",
