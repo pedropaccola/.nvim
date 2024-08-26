@@ -38,8 +38,8 @@ vim.keymap.set("i", "<C-M-k>", "<Esc>:m .-2<cr>==gi", { desc = "Move up" })
 
 -- LSP formatting
 vim.keymap.set("n", "<C-M-f>", function()
-    vim.lsp.buf.format({ async = false })
-    vim.api.nvim_command("write")
+  vim.lsp.buf.format({ async = false })
+  vim.api.nvim_command("write")
 end, { desc = "Lsp formatting" })
 
 -- Toggle options

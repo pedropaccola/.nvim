@@ -1,13 +1,13 @@
 -- Set <space> as the leader key
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+vim.g.mapleader        = " "
+vim.g.maplocalleader   = " "
 
 -- See `:help vim.o`
-vim.g.netrw_banner = 0 -- gets rid of the annoying banner for netrw
-vim.g.netrw_altv   = 1 -- change from left splitting to right splitting
+vim.g.netrw_banner     = 0 -- gets rid of the annoying banner for netrw
+vim.g.netrw_altv       = 1 -- change from left splitting to right splitting
 
 vim.opt.mouse          = "a"
-vim.opt.clipboard      = "unnamedplus"
+-- vim.opt.clipboard      = "unnamedplus"
 vim.opt.undofile       = true -- save undo history
 vim.opt.pumheight      = 10   -- pop up menu heigth
 vim.opt.swapfile       = false
@@ -19,25 +19,27 @@ vim.opt.termguicolors  = true
 vim.opt.foldmethod     = "manual"
 vim.opt.updatetime     = 100
 vim.opt.timeoutlen     = 300
-vim.opt.laststatus     = 2    -- always show statusline
+vim.opt.laststatus     = 2 -- always show statusline
 -- vim.opt.syntax         = "on"
 vim.opt.splitkeep      = "screen"
+
+-- edit on save
 vim.opt.fixendofline   = false
 
-vim.opt.ignorecase = true  -- case insensitive
-vim.opt.smartcase  = true  -- case sensitive if capital letter in search
-vim.opt.hlsearch   = false -- highlight
+vim.opt.ignorecase     = true  -- case insensitive
+vim.opt.smartcase      = true  -- case sensitive if capital letter in search
+vim.opt.hlsearch       = false -- highlight
 
 vim.opt.signcolumn     = "yes"
 vim.opt.number         = true
 vim.opt.relativenumber = true
 
-vim.opt.tabstop     = 2
-vim.opt.shiftwidth  = 2
-vim.opt.expandtab   = true
-vim.opt.smartindent = true
-vim.opt.autoindent  = true
-vim.opt.showtabline = 2    -- always show the tab line
+vim.opt.tabstop        = 2
+vim.opt.shiftwidth     = 2
+vim.opt.expandtab      = true
+vim.opt.smartindent    = true
+vim.opt.autoindent     = true
+vim.opt.showtabline    = 2 -- always show the tab line
 
-vim.opt.wildmode   = "longest:full:full"
-vim.opt.wildignore = "*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx,*.db"
+vim.opt.wildmode       = "longest:full:full"
+vim.opt.wildignore     = "*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx,*.db"
